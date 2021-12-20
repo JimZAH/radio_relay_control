@@ -6,8 +6,8 @@
  */
 
 // Options
-#define DTMF_DELAY 25 // Delay before next digit in milliseconds
-#define PASSCODE 1234 // Password
+#define DTMF_DELAY 1000 // Delay before next digit in milliseconds
+#define PASSCODE 1111 // Password
 #define RELAY_1 0x1 // Relay 1
 #define RELAY_2 0x2 // Relay 2
 #define RELAY_3 0x3 // Relay 3
@@ -18,8 +18,8 @@
 #define RELAY_8 0x8 // Relay 8
 
 // MASKS
-#define DTMF_DETECT 0x1 // DTMF DETECT LINE
-#define DTMF_MASK 0x1E // DTMF Digits
+#define DTMF_DETECT 0x10 // DTMF DETECT LINE
+#define DTMF_MASK 0xF // DTMF Digits
 
 int DTMF_CODE; // Digit store
 int cc = 0; // Digit counter
@@ -53,35 +53,36 @@ void loop()
         switch (input[4]) // Relay selection
         {
           case RELAY_1:
-          //relay 1
+          (input[5]) ? PIND = PIND | 0x2 : PIND = 0;
           break;
           case RELAY_2:
-          //realy 2
+          (input[5]) ? PIND = PIND | 0x4 : PIND = 0;
           break;
           case RELAY_3:
-          //relay 3
+          (input[5]) ? PIND = PIND | 0x8 : PIND = 0;
           break;
           case RELAY_4:
-          //realy 4
+          (input[5]) ? PIND = PIND | 0x10 : PIND = 0;
           break;
           case RELAY_5:
-          //relay 5
+          (input[5]) ? PIND = PIND | 0x20 : PIND = 0;
           break;
           case RELAY_6:
-          //realy 6
+          (input[5]) ? PIND = PIND | 0x40 : PIND = 0;
           break;
           case RELAY_7:
-          //relay 7
+          (input[5]) ? PIND = PIND | 0x80 : PIND = 0;
           break;
           case RELAY_8:
-          //realy 8
           break;
           default:
           // invalid selection
+          _delay_ms(500);
           break;
         }
       }
-      cc = 0; // Reset digit counter
+      cc = -1; // Reset digit counter
+      DTMF_CODE = 0;
     }
 
      _delay_ms(DTMF_DELAY); // Max length of each digit

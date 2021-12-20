@@ -30,7 +30,7 @@ void setup()
   DDRB = 0x0; // Set port B to inputs
   DDRD = 0xFE; // Set port D to 1-7 OUTPUTS
   PORTD = 0x0; // Outputs low 
-  DDRB = 0x0; // PULLUPS LOW
+  PINB = 0x0; // PULLUPS LOW
 }
 
 void loop()

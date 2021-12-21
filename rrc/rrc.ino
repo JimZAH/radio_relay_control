@@ -124,10 +124,12 @@ void loop()
         switch (input[5])
         {
           case 0x1:
-          PORTD = PORTD | (radioOne[input[6]][1] << 1);
+          PORTD = PORTD & 0xF0;
+          PORTD = PORTD | (radioOne[input[6]][1] << 1) & 0xF;
           break;
           case 0x2:
-          PORTD = (radioTwo[input[6]][1] << 5);
+          PORTD = PORTD & 0xF;
+          PORTD = PORTD | (radioTwo[input[6]][1] << 5);
           PORTB = (radioTwo[input[6]][1] >> 3);
           break;
           case 0x3:

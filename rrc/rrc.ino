@@ -23,6 +23,66 @@
 #define PASSCODE 1111 // Password
 #define START_DIGIT 0xB // (*)
 
+// Radio control array
+int radioOne[16][2] =
+{
+  {0x0, 0b0000},
+  {0x1, 0b0001},
+  {0x2, 0b0010},
+  {0x3, 0b0011},
+  {0x4, 0b0100},
+  {0x5, 0b0101},
+  {0x6, 0b0110},
+  {0x7, 0b0111},
+  {0x8, 0b1000},
+  {0x9, 0b1001},
+  {0xA, 0b1010},
+  {0xB, 0b1011},
+  {0xC, 0b1100},
+  {0xD, 0b1101},
+  {0xE, 0b1110},
+  {0xF, 0b1111}
+};
+int radioTwo[16][2] =
+{
+  {0x0, 0b0000},
+  {0x1, 0b0001},
+  {0x2, 0b0010},
+  {0x3, 0b0011},
+  {0x4, 0b0100},
+  {0x5, 0b0101},
+  {0x6, 0b0110},
+  {0x7, 0b0111},
+  {0x8, 0b1000},
+  {0x9, 0b1001},
+  {0xA, 0b1010},
+  {0xB, 0b1011},
+  {0xC, 0b1100},
+  {0xD, 0b1101},
+  {0xE, 0b1110},
+  {0xF, 0b1111}
+};
+int radioThree[16][2] =
+{
+  {0x0, 0b0000},
+  {0x1, 0b0001},
+  {0x2, 0b0010},
+  {0x3, 0b0011},
+  {0x4, 0b0100},
+  {0x5, 0b0101},
+  {0x6, 0b0110},
+  {0x7, 0b0111},
+  {0x8, 0b1000},
+  {0x9, 0b1001},
+  {0xA, 0b1010},
+  {0xB, 0b1011},
+  {0xC, 0b1100},
+  {0xD, 0b1101},
+  {0xE, 0b1110},
+  {0xF, 0b1111}
+};
+
+
 // MASKS
 #define DTMF_DETECT 0x20 // DTMF DETECT LINE
 #define DTMF_MASK 0x1E // DTMF Digits
@@ -64,6 +124,19 @@ void loop()
       if (pass == PASSCODE) // If the password is correct
       {
         PORTC = 0x2; // Success lamp to show access granted
+        switch (input[5])
+        {
+          case 0x1:
+          PORTD = (radioOne[input[6]][1] << 1);
+          break;
+          case 0x2:
+          break;
+          case 0x3:
+          break;
+          default:
+          // Radio not found
+          break;
+        }
       }
       cc = -1; // Reset digit counter
       DTMF_CODE = 0;

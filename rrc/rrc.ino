@@ -110,7 +110,7 @@ void loop()
     DTMF_CODE = ((PINB & DTMF_MASK) >> 1);
     input[cc] = DTMF_CODE; // Store our current digit into array
 
-    if (cc >= 6) // If we've received at least 8 digits
+    if (cc >= 6) // If we've received at least 7 digits
     {
       int pass = 0;
       for (int i = 0; i < 4; i++) // Process the password

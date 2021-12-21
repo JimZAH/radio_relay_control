@@ -89,16 +89,17 @@ int radioThree[16][2] =
 
 int DTMF_CODE; // Digit store
 int cc = 0; // Digit counter
-int input[7] = {0}; // Input array
-// [*,p,p,p,p,1/2/3,CMD,CMD2]
+int input[6] = {0}; // Input array
+// [*,p,p,p,p,1/2/3,CMD]
 
 void setup()
 {
-  DDRB = 0x0; // Set port B to inputs
-  DDRD = 0xFE; // Set port D to 1-7 OUTPUTS
-  DDRC = 0x1F; // // Set port C to 0-5 OUTPUTS
+  DDRB = 0x1; // Set port B 9 - 13 to inputs
+  DDRC = 0x1F; // // Set port C 0-5 to OUTPUTS
+  DDRD = 0xFE; // Set port D 1-7 to OUTPUTS
+  PORTB = 0x0; // PULLUPS LOW
+  PORTC = 0x0; // Outputs LOW
   PORTD = 0x0; // Outputs low 
-  PINB = 0x0; // PULLUPS LOW
 }
 
 void loop()
@@ -109,12 +110,8 @@ void loop()
     DTMF_CODE = ((PINB & DTMF_MASK) >> 1);
     input[cc] = DTMF_CODE; // Store our current digit into array
 
-    if (cc >= 7) // If we've received at least 8 digits
+    if (cc >= 6) // If we've received at least 8 digits
     {
-      if (input[0] != START_DIGIT) // Check the command started with *
-      {
-        // TODO: command is malformed
-      } else {
       int pass = 0;
       for (int i = 0; i < 4; i++) // Process the password
       {
@@ -127,9 +124,11 @@ void loop()
         switch (input[5])
         {
           case 0x1:
-          PORTD = (radioOne[input[6]][1] << 1);
+          PORTD = PORTD | (radioOne[input[6]][1] << 1);
           break;
           case 0x2:
+          PORTD = (radioTwo[input[6]][1] << 5);
+          PORTB = (radioTwo[input[6]][1] >> 3);
           break;
           case 0x3:
           break;
@@ -140,8 +139,16 @@ void loop()
       }
       cc = -1; // Reset digit counter
       DTMF_CODE = 0;
-    }
    }
+
+     if ((cc < 1 && input[0] != 0xB) || DTMF_CODE == 0xC){ // Reset all if the first digit is not a (*) or we received a (#)
+      for (int i=0; i < sizeof(input)/2; i++){
+        input[i] = 0;
+      }
+      cc = -1; // Reset digit counter
+      DTMF_CODE = 0;
+     }
+     
      _delay_ms(DTMF_DELAY); // Max length of each digit
      ((PINB & DTMF_DETECT) == DTMF_DETECT) ? cc = 0 : cc++; // If we're still receiving a digit invalidate it
   }

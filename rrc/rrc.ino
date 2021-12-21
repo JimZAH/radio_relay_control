@@ -144,8 +144,10 @@ void loop()
       DTMF_CODE = 0;
    }
 
-     if ((cc < 1 && input[0] != START_DIGIT) || DTMF_CODE == END_DIGIT){ // Reset all if the first digit is not a (*) or we received a (#)
-      for (int i=0; i < sizeof(input)/2; i++){
+     if ((cc < 1 && input[0] != START_DIGIT) || DTMF_CODE == END_DIGIT)
+     { // Reset all if the first digit is not a (*) or we received a (#)
+      for (int i=0; i < sizeof(input)/2; i++)
+      {
         input[i] = 0;
       }
       cc = -1; // Reset digit counter

@@ -110,13 +110,8 @@ void loop()
     DTMF_CODE = ((PINB & DTMF_MASK) >> 1);
     input[cc] = DTMF_CODE; // Store our current digit into array
 
-    if (cc > 4 && (DTMF_CODE > 0x8 || DTMF_CODE < 0x1)) // Ignore digits 0,9,A,B,C,D
+    if (cc >= 6) // If we've received at least 7 digits
     {
-     cc--;
-    }
-    else if (cc >= 6) // If we've received at least 7 digits
-    {
-    
       int pass = 0;
       for (int i = 0; i < 4; i++) // Process the password
       {
@@ -128,11 +123,11 @@ void loop()
         switch (input[5])
         {
           case 0x1:
-          PORTD = PORTD & 0xF0; // Only clear the 4 bits for radio 1
-          PORTD = PORTD | (radioOne[input[6]][1] << 1) & 0xF;
+          PORTD = PORTD & 0xE0; // Only clear the 4 bits for radio 1
+          PORTD = PORTD | (radioOne[input[6]][1] << 1) & 0xFF;
           break;
           case 0x2:
-          PORTD = PORTD & 0xF; // Only clear the 4 bits for radio 2
+          PORTD = PORTD & 0xF << 1; // Only clear the 4 bits for radio 2
           PORTD = PORTD | (radioTwo[input[6]][1] << 5);
           PORTB = (radioTwo[input[6]][1] >> 3);
           break;

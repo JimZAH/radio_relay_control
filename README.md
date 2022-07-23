@@ -13,8 +13,11 @@ The command above would turn radio 1 binary output to 0
  *111139
 The command above would turn radio 3 binary output to 9
 
-Sending # will reset the counters so you can start again.
+Sending # will reset the input so you can start again.
 
+*11119X
+Admin mode
+- 1 Reset all outputs to 0
 
 # Wiring
 

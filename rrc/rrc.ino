@@ -127,16 +127,27 @@ void loop()
           PORTD = PORTD | (radioOne[input[6]][1] << 1) & 0xFF;
           break;
           case 0x2:
-          PORTD = PORTD & 0xF << 1; // Only clear the 4 bits for radio 2
+          PORTD = PORTD & 0x1E; // Only clear the 4 bits for radio 2
           PORTD = PORTD | (radioTwo[input[6]][1] << 5);
           PORTB = (radioTwo[input[6]][1] >> 3);
           break;
           case 0x3:
-          PORTC = 0;
+          PORTC = 0x0;
           PORTC = (radioThree[input[6]][1] << 2);
           break;
-          default:
-          // Radio not found
+          case 0x9: // Admin mode
+          switch (input[6])
+          {
+            case 0x1: // Turn off all outputs (panic reset)
+            PORTB = 0x0;
+            PORTC = 0x0;
+            PORTD = 0x0;
+            break;
+            default:
+            break;
+          }
+          break;
+          default: // Command not found
           break;
         }
       }
